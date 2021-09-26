@@ -1,11 +1,10 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ClientController : MonoBehaviour
 {
     [SerializeField] private PlayerController playerControllerPrefab;
+    [SerializeField] private CoinController coinController;
     [SerializeField] private Client client;
     private int playerId = -1;
     private Dictionary<int, PlayerController> playerControllers = new Dictionary<int, PlayerController>();
@@ -36,7 +35,15 @@ public class ClientController : MonoBehaviour
         {
             OnCreatePlayer(playerModel);
         }
+
+        OnCreateCoins(model.CreateCoins);
     }
+
+    private void OnCreateCoins(Dictionary<int, Vector3Model> createCoins)
+    {
+        coinController.OnCreateCoins(createCoins);
+    }
+
     private void CheckIsCurrentPlayer(PlayerController playerController)
     {
         if (playerController.Id == playerId)
@@ -44,6 +51,7 @@ public class ClientController : MonoBehaviour
             playerController.SetCurrentPlayer();
         }
     }
+
     public void UpdatePlayerModel(UpdateModel model)
     {
         foreach (var playerPositionModel in model.PlayerPositionModels)
@@ -55,5 +63,4 @@ public class ClientController : MonoBehaviour
             }
         }
     }
-
 }
